@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-lune&z^a!8&!_yqiv^9pr6it6$zz)-#u$%%ff)-kull0oc(l#)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
