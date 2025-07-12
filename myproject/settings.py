@@ -130,4 +130,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000", # Allow your React frontend to access the API
         # Add other origins here if your frontend runs on different domains/ports
+    f"http://{os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',')[0]}", # Dynamically add the first ALLOWED_HOST
     ]
