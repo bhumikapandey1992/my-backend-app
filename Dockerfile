@@ -1,5 +1,5 @@
 # Stage 1: Build the python dependencie
-FROM python:3.11-slim-buster AS build 
+FROM python:3.11-slim-bullseye AS build 
 
 # Set environment variables for python
 ENV PYTHONUNBUFFERED=1
