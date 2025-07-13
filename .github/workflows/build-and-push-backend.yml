@@ -1,0 +1,44 @@
+# .github/workflows/build-and-push-backend.yml
+name: Build and Push Backend to ECR
+
+on:
+  push:
+    branches:
+      - main # Trigger this workflow on pushes to the 'main' branch of backend repo
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }} # AWS region from GitHub Secrets
+  ECR_REPOSITORY: my-backend-app # Name of your ECR repository
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write # Required for OIDC authentication
+      contents: read  # Required to checkout the repository code
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 # Action to clone your GitHub repository (my-backend-app)
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          # Use Access Key/Secret Key for authentication
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+         docker buildx build --platform linux/amd64 -t "${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_REGION}".amazonaws.com/my-backend-app:latest --push .
+
+         echo "Backend image pushed to ECR: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
