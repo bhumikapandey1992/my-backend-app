@@ -25,7 +25,13 @@ SECRET_KEY = 'django-insecure-lune&z^a!8&!_yqiv^9pr6it6$zz)-#u$%%ff)-kull0oc(l#)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost,backend').split(',')
+
+DOMAIN_NAME = "theproductpeek.shop" # Your actual domain
+if DOMAIN_NAME not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(DOMAIN_NAME)
+if f"www.{DOMAIN_NAME}" not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(f"www.{DOMAIN_NAME}")
 
 
 # Application definition
@@ -129,6 +135,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CORS settings for django-cors-headers
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000", # Allow your React frontend to access the API
+    "http://theproductpeek.shop", # Your actual domain
+    "https://theproductpeek.shop", # Your actual domain with HTTPS
+    "http://www.theproductpeek.shop", # Your www subdomain
+    "https://www.theproductpeek.shop", # Your www subdomain with HTTPS
         # Add other origins here if your frontend runs on different domains/ports
     f"http://{os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',')[0]}", # Dynamically add the first ALLOWED_HOST
     ]
